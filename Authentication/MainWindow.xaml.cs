@@ -12,78 +12,90 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Net;
+using System.Net.Mail;
+
 
 namespace Authentication
 {
     public partial class MainWindow : Window
     {
-        private string login = "талгат лох";
-        private string password = "это правда";
+        private static string _email;
+        private static string _password;
 
         public MainWindow()
         {
             InitializeComponent();
         }
 
+        private static class MailSender
+        {
+            public static async Task SendMail(string recipient)
+            {
+                MailAddress fromAddress = new MailAddress("test.reg.boss@gmail.com", "Boss");
+                MailAddress toAddress = new MailAddress(recipient);
+
+                using (MailMessage message = new MailMessage(fromAddress, toAddress))
+                using (SmtpClient smtpClient = new SmtpClient())
+                {
+                    message.Subject = "Рады знакомству! Спасибо, что Вы с нами!";
+                    message.Body = $"<h1>Данные для входа в аккаунт</h1><p>Почта: {_email}<br>Пароль: {_password}</p>";
+                    message.IsBodyHtml = true;
+
+                    smtpClient.Host = "smtp.gmail.com";
+                    smtpClient.Port = 587;
+                    smtpClient.EnableSsl = true;
+                    smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
+                    smtpClient.UseDefaultCredentials = false;
+
+                    smtpClient.Credentials = new NetworkCredential(fromAddress.Address, "jbvc qiyw fwwc sleq");
+
+                    await smtpClient.SendMailAsync(message);
+                }
+            }
+        }
+
         private void SignInBtn_Click(object sender, RoutedEventArgs e)
         {
-            if (LoginTB.Text.Trim() == String.Empty || PasswordTB.Text.Trim() == String.Empty)
+            if (EmailTB.Text.Trim() == String.Empty || PasswordTB.Password.Trim() == String.Empty)
             {
-                if (LoginTB.Text.Trim() == String.Empty)
-                    LoginTB.Background = Brushes.LightPink;
-                if (PasswordTB.Text.Trim() == String.Empty)
+                if (EmailTB.Text.Trim() == String.Empty)
+                    EmailTB.Background = Brushes.LightPink;
+                if (PasswordTB.Password.Trim() == String.Empty)
                     PasswordTB.Background = Brushes.LightPink;
                 MessageBox.Show("Все поля должны быть заполнены!");
                 PasswordTB.Background = Brushes.White;
-                LoginTB.Background = Brushes.White;
+                EmailTB.Background = Brushes.White;
                 return;
             }
 
-            if (LoginTB.Text.Trim() != login &&  PasswordTB.Text.Trim() != password)
+            if (!EmailTB.Text.Contains("@"))
             {
-                LoginTB.Background = Brushes.LightPink;
-                PasswordTB.Background = Brushes.LightPink;
-                MessageBox.Show("Неверные логин  и пароль!");
-                PasswordTB.Background = Brushes.White;
-                LoginTB.Background = Brushes.White;
-                LoginTB.Clear();
-                PasswordTB.Clear();
+                EmailTB.Background = Brushes.LightPink;
+                MessageBox.Show("Неверный формат почты!");
+                EmailTB.Clear();
+                EmailTB.Background = Brushes.White;
                 return;
             }
-
-            if (LoginTB.Text.Trim() != login)
-            {
-                LoginTB.Background = Brushes.LightPink;
-                MessageBox.Show("Неверный логин!");
-                LoginTB.Clear();
-                LoginTB.Background = Brushes.White;
-                return;
-            } else
-            {
-                LoginTB.Background = Brushes.White;
-            }
-
-            if (PasswordTB.Text.Trim() != password)
-            {
-                PasswordTB.Background = Brushes.LightPink;
-                MessageBox.Show("Неверный пароль!");
-                PasswordTB.Clear();
-                PasswordTB.Background = Brushes.White;
-                return;
-            } else
-            {
-                PasswordTB.Background = Brushes.White;
-            }
-
-            LoginTB.Background = Brushes.LightGreen;
+                
+            EmailTB.Background = Brushes.LightGreen;
             PasswordTB.Background = Brushes.LightGreen;
 
-            MessageBox.Show($"Добрый день, {login}!\nРады, что Вы с нами!");
+            _email = EmailTB.Text;
+            _password = PasswordTB.Password;
+            SendMessage();
 
-            LoginTB.Clear();
+            MessageBox.Show($"Регистрация прошла успешно!\nДанные для входа отправлены на почту {EmailTB.Text}");
+
+            EmailTB.Clear();
             PasswordTB.Clear();
             PasswordTB.Background = Brushes.White;
-            LoginTB.Background = Brushes.White;
+            EmailTB.Background = Brushes.White;
+        }
+
+        private async Task SendMessage()
+        {
+            await MailSender.SendMail(_email);
         }
 
         private void CloseBtn_Click(object sender, RoutedEventArgs e)

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Authentication"
         mc:Ignorable="d"
-        Icon="icon.png"
+        Icon="/img/icon.png"
         WindowStartupLocation="CenterScreen"
         Title="Authentication" Height="1080" Width="1920" WindowStyle="ThreeDBorderWindow" FontFamily="Rockwell Extra Bold">
     <Window.Resources>
@@ -108,18 +108,53 @@
                 </MultiTrigger>
             </Style.Triggers>
         </Style>
+        <Style TargetType="{x:Type PasswordBox}">
+            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource TextBox.Static.Border}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="KeyboardNavigation.TabNavigation" Value="None"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="AllowDrop" Value="true"/>
+            <Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst"/>
+            <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type PasswordBox}">
+                        <Border x:Name="border" CornerRadius="12" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="True">
+                            <ScrollViewer x:Name="PART_ContentHost" Focusable="false" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Opacity" TargetName="border" Value="0.56"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="IsInactiveSelectionHighlightEnabled" Value="true"/>
+                        <Condition Property="IsSelectionActive" Value="false"/>
+                    </MultiTrigger.Conditions>
+                    <Setter Property="SelectionBrush" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightBrushKey}}"/>
+                </MultiTrigger>
+            </Style.Triggers>
+        </Style>
     </Window.Resources>
     <Window.Background>
-        <ImageBrush ImageSource="/background-gradient.jpg" />
+        <ImageBrush ImageSource="/img/background-gradient.jpg" />
     </Window.Background>
     <Grid>
         <Rectangle HorizontalAlignment="Center" Height="800" Margin="0,151,0,0" VerticalAlignment="Top" Width="1600" Fill="#CCFFFFFF" RadiusY="30" RadiusX="30"/>
-        <Label Content="AUTHENTICATION" HorizontalAlignment="Center" Height="80" Margin="0,211,0,0" VerticalAlignment="Top" Width="762" FontSize="72" Foreground="#FF000432" FontFamily="Rockwell Extra Bold"/>
-        <TextBox x:Name="LoginTB" HorizontalAlignment="Center" Height="81" Margin="0,414,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="1396" FontSize="26" FontFamily="Rockwell" VerticalContentAlignment="Center" Padding="15,0,0,0" BorderBrush="#FF6382B3" Foreground="#FF000C58" Background="White"/>
-        <TextBox x:Name="PasswordTB"  HorizontalAlignment="Center" Height="81" TextWrapping="Wrap" VerticalAlignment="Top" Width="1396" FontSize="26" FontFamily="Rockwell" VerticalContentAlignment="Center" Padding="15,0,0,0" BorderBrush="#FF6382B3" Foreground="#FF000C58" Background="White" Margin="0,592,0,0"/>
-        <Label Content="Login:" HorizontalAlignment="Left" Height="56" Margin="262,351,0,0" VerticalAlignment="Top" Width="290" FontSize="36" Foreground="#FF000432"/>
+        <Label Content="REGISTRATION" HorizontalAlignment="Center" Height="80" Margin="0,211,0,0" VerticalAlignment="Top" Width="649" FontSize="72" Foreground="#FF000432" FontFamily="Rockwell Extra Bold"/>
+        <TextBox x:Name="EmailTB" HorizontalAlignment="Center" Height="81" Margin="0,414,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="1396" FontSize="26" FontFamily="Rockwell" VerticalContentAlignment="Center" Padding="15,0,0,0" BorderBrush="#FF6382B3" Foreground="#FF000C58" Background="White"/>
+        <PasswordBox x:Name="PasswordTB"  HorizontalAlignment="Center" Height="81" VerticalAlignment="Top" Width="1396" FontSize="26" FontFamily="Rockwell" VerticalContentAlignment="Center" Padding="15,0,0,0" BorderBrush="#FF6382B3" Foreground="#FF000C58" Background="White" Margin="0,592,0,0"/>
+        <Label Content="Email:" HorizontalAlignment="Left" Height="56" Margin="262,351,0,0" VerticalAlignment="Top" Width="290" FontSize="36" Foreground="#FF000432"/>
         <Label Content="Password:" HorizontalAlignment="Left" Height="56" Margin="262,531,0,0" VerticalAlignment="Top" Width="290" FontSize="36" Foreground="#FF000432"/>
-        <Button x:Name="SignInBtn" Content="Sign in" HorizontalAlignment="Left" Height="95" Margin="262,751,0,0" VerticalAlignment="Top" Width="674" FontSize="36" Click="SignInBtn_Click" Foreground="White" Background="#FF373FAB" BorderBrush="{x:Null}" Cursor="Hand" BorderThickness="0,0,0,0"/>
+        <Button x:Name="SignInBtn" Content="Sign in" HorizontalAlignment="Left" Height="95" Margin="262,751,0,0" VerticalAlignment="Top" Width="674" FontSize="36" Foreground="White" Background="#FF373FAB" BorderBrush="{x:Null}" Cursor="Hand" BorderThickness="0,0,0,0" Click="SignInBtn_Click"/>
         <Button x:Name="CloseBtn" Content="Close" HorizontalAlignment="Left" Height="95" Margin="984,751,0,0" VerticalAlignment="Top" Width="674" FontSize="36" Click="CloseBtn_Click" Foreground="White" Background="#FFC12F7C" BorderBrush="{x:Null}" Cursor="Hand" BorderThickness="0,0,0,0"/>
 
     </Grid>
